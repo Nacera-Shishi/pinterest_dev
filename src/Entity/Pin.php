@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PinRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PinRepository::class)]
 #[ORM\Table(name:"pins")]
@@ -16,9 +17,13 @@ class Pin
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Length(min:3, minMessage:'Vous devez avoir un titre de minimum {{ limit }} caractères ! ')]
+    #[Assert\NotBlank(message:"Votre champs ne peut pas être vide")]
     private $title;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\Length(min:10, minMessage:'Vous devez avoir une description de minimum {{ limit }} caractères ! ')]
+    #[Assert\NotBlank(message:"Votre champs ne peut pas être vide")]
     private $description;
 
     #[ORM\Column(type:'datetime', options:['default'=>'CURRENT_TIMESTAMP'])]
@@ -37,7 +42,7 @@ class Pin
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -49,7 +54,7 @@ class Pin
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
